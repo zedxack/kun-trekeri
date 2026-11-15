@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kun tartibi trekeri</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f766e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kun tartibi">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#eef2f1;--cd:#fff;--tx:#14231f;--mu:#5d6f69;--ln:#dbe3e0;--ac:#0f766e;--md:#c98a12;--lo:#cf5a4a;--on:#fff;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1514;--cd:#152220;--tx:#e6efec;--mu:#8fa39d;--ln:#243633;--ac:#2bb3a3;--md:#e0a63a;--lo:#e07566;--on:#04211d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1514;--cd:#152220;--tx:#e6efec;--mu:#8fa39d;--ln:#243633;--ac:#2bb3a3;--md:#e0a63a;--lo:#e07566;--on:#04211d;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:560px;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;display:flex;gap:4px;padding:8px 12px;background:var(--bg)}
+nav button{flex:1;padding:9px 0;border:1px solid var(--ln);background:var(--cd);color:var(--mu);border-radius:10px;font:inherit;font-weight:600}
+nav button.on{background:var(--ac);border-color:var(--ac);color:var(--on)}
+main{padding:4px 12px 48px}
+.c{background:var(--cd);border:1px solid var(--ln);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.r{display:flex;align-items:center;justify-content:space-between;gap:8px}
+h2{margin:0;font-size:16px}
+small{color:var(--mu);font-size:12.5px}
+.big{font-size:34px;font-weight:700;line-height:1}
+.bar{height:10px;background:var(--ln);border-radius:9px;overflow:hidden;margin:10px 0 8px}
+.bar i{display:block;height:100%}
+.g{border:1px solid var(--ln);background:var(--cd);color:var(--tx);border-radius:9px;padding:6px 14px;font:inherit}
+.it{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--ln);cursor:pointer}
+.l .it:first-child{border-top:0}
+.bx{flex:none;width:26px;height:26px;margin-top:1px;border:2px solid var(--ln);border-radius:8px;display:grid;place-items:center;font-weight:700;color:var(--on)}
+.s1 .bx{background:var(--ac);border-color:var(--ac)}
+.s2 .bx{background:var(--mu);border-color:var(--mu)}
+.s2 .t{opacity:.55;text-decoration:line-through}
+.cols{display:flex;gap:6px;align-items:flex-end;height:120px;margin-top:12px}
+.cols>div{flex:1;height:100%;display:flex;align-items:flex-end;cursor:pointer}
+.cols i{display:block;width:100%;border-radius:6px 6px 2px 2px;min-height:3px}
+.lb{display:flex;gap:6px;text-align:center;margin-top:4px}
+.lb small{flex:1}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:10px}
+.cal div{aspect-ratio:1;border-radius:8px;display:grid;place-items:center;font-size:12.5px;background:var(--ln);color:var(--mu);cursor:pointer}
+.cal .d{font-weight:600}
+.cal .k3{background:var(--ac);color:var(--on)}
+.cal .k2{background:var(--md);color:#101a18}
+.cal .k1{background:var(--lo);color:#101a18}
+.cal .td{outline:2px solid var(--tx);outline-offset:1px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}
+label{display:block;font-size:12.5px;color:var(--mu);margin-bottom:3px}
+input{width:100%;padding:9px 10px;border:1px solid var(--ln);border-radius:9px;background:var(--bg);color:var(--tx);font:inherit}
+</style>
+</head>
+<body>
+<nav>
+<button data-k="t" data-a="go('t',1)">Bugun</button>
+<button data-k="h" data-a="go('h')">Hafta</button>
+<button data-k="o" data-a="go('o')">Oy</button>
+<button data-k="y" data-a="go('y')">Yil</button>
+<button data-k="b" data-a="go('b')">Tana</button>
+</nav>
+<main></main>
+<script>
+const WD=['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'],
+MN=['Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avgust','Sentabr','Oktabr','Noyabr','Dekabr'],
+W2=['Du','Se','Ch','Pa','Ju','Sh','Ya'];
+// [id, vaqt, nomi, izoh, haftaning kunlari (0=Yakshanba); bo‘sh = har kuni]
+const T=[
+['up','07:00','Uyg‘onish + 1 stakan suv','Deraza och, 5 daqiqa yorug‘lik. Dam olish kunida ham 08:00 dan kech emas'],
+['br','07:15','Nonushta','Oqsil bo‘lsin: tuxum, tvorog, yogurt + non yoki bo‘tqa'],
+['wk','08:20','Ishga piyoda — 1,5 km','Tez qadam: bu ham mashq hisoblanadi','12345'],
+['jb','09:00','Ish (FarLine), 12:00 gacha','Har 50 daqiqada 3 daqiqa tur, 20 soniya uzoqqa qara','12345'],
+['lu','12:00','Tushlik','O‘tkazib yuborma: 13:00 darsgacha to‘yib ol','12345'],
+['un','13:00','Universitet — darslar','Yoningda suv shishasi bo‘lsin','12345'],
+['cf','15:00','15:00 dan keyin kofein yo‘q','Kofe, qora choy, energetik ichimlik uyquni buzadi'],
+['en','17:30','Westudy — ingliz tili kursi','Vaqt taxminiy: kursingga moslab o‘zgartiramiz','12345'],
+['wt','Kun bo‘yi','Suv — jami ~2 litr','Shisha olib yur; 21:00 dan keyin kam ich'],
+['dn','19:30','Kechki ovqat','Yengil bo‘lsin; 21:00 dan keyin og‘ir ovqat yo‘q'],
+['ex','20:00','Mashq — 20 daqiqa','Turnik 4×2–3 ta · brusda dips 3×5 (sekin tush) · yerdan itarilish 3×10','135'],
+['st','20:25','Cho‘zilish — 5–10 daqiqa','Bo‘yin, yelka, bel, bilak: kompyuterda o‘tirishdan'],
+['bm','20:40','BMI loyiha — 80 daqiqa','35 daqiqa kod, 10 tanaffus, 35 kod. Telefon boshqa xonada'],
+['fr','22:00','Erkin vaqt — 30 daqiqagacha','Instagram, PUBG, telefon: taymer qo‘y'],
+['ph','22:30','Ekranlar o‘chadi','Telefonni zaryadga ulab, yotoqdan uzoqqa qo‘y'],
+['pr','22:40','Dush + ertangi kunga tayyorgarlik','Kiyim, sumka, ertangi 3 ta asosiy ish'],
+['bd','23:00','Yotish — chiroq o‘chiq','Hozir 02:00 da yotsang: har 3 kunda 15–20 daqiqa oldinga sur'],
+['rv','Yakshanba','Haftalik tahlil — 5 daqiqa','“Tana” bo‘limiga vazn va tortilishni yoz','0']
+];
+const $=s=>document.querySelector(s),pad=n=>String(n).padStart(2,'0'),
+ds=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),
+pd=s=>{const[a,b,c]=s.split('-');return new Date(+a,+b-1,+c)},
+today=()=>ds(new Date()),
+addD=(s,n)=>{const d=pd(s);d.setDate(d.getDate()+n);return ds(d)},
+fm=s=>{const d=pd(s);return d.getDate()+' '+MN[d.getMonth()].toLowerCase()};
+let S={d:{}},cur=today(),tab='t',col=null,ro=false,busy=true,note='',q=Promise.resolve();
+const tf=s=>{const w=pd(s).getDay();return T.filter(t=>!t[4]||t[4].includes(w))},
+rec=s=>S.d[s]||(S.d[s]={});
+function first(){return Object.keys(S.d).filter(k=>S.d[k].t&&Object.keys(S.d[k].t).length).sort()[0]}
+function calc(s){const k=(S.d[s]||{}).t||{};let n=0,m=0;tf(s).forEach(t=>{const v=k[t[0]];if(v===2)return;m++;if(v===1)n++});return[n,m]}
+function pc(s){if(s>today())return null;const f=first();if(!f||s<f)return null;const[n,m]=calc(s);return m?Math.round(n/m*100):0}
+function avg(a){const v=a.map(pc).filter(x=>x!==null);return v.length?Math.round(v.reduce((x,y)=>x+y,0)/v.length):null}
+const cl=p=>p===null?'':p>=80?'k3':p>=50?'k2':'k1',
+bg=p=>p===null?'var(--ln)':p>=80?'var(--ac)':p>=50?'var(--md)':'var(--lo)';
+function streak(){let s=today(),c=0;if((pc(s)||0)<70)s=addD(s,-1);while((pc(s)||0)>=70){c++;s=addD(s,-1)}return c}
+function wk(s){const o=(pd(s).getDay()+6)%7,m=addD(s,-o);return[...Array(7)].map((_,i)=>addD(m,i))}
+function miss(a){const o={};a.forEach(s=>{if(pc(s)===null)return;const k=(S.d[s]||{}).t||{};tf(s).forEach(t=>{if(!k[t[0]])o[t[2]]=(o[t[2]]||0)+1})});return Object.entries(o).sort((x,y)=>y[1]-x[1]).slice(0,3)}
+function mdays(y,m){return[...Array(new Date(y,m+1,0).getDate())].map((_,i)=>ds(new Date(y,m,i+1)))}
+
+function vT(){const s=cur,r=S.d[s]||{},k=r.t||{},[n,m]=calc(s),p=m?Math.round(n/m*100):0,w=pd(s).getDay();
+return `<div class=c><div class=r><button class=g data-a="mv(-1)">‹</button><div style="text-align:center"><h2>${WD[w]}, ${fm(s)}</h2><small>${s===today()?'Bugun':'Boshqa kun'}</small></div><button class=g data-a="mv(1)">›</button></div>
+<div class=bar><i style="width:${p}%;background:${bg(p)}"></i></div><div class=r><b class=big>${p}%</b><small>${n} / ${m} bajarildi · maqsad 80%+</small></div></div>
+<div class=c><div class=l>${tf(s).map(t=>`<div class="it s${k[t[0]]||0}" data-a="tg('${t[0]}')"><span class=bx>${['','✓','—'][k[t[0]]||0]}</span><span class=t><b>${t[1]}</b> ${t[2]}<br><small>${t[3]}</small></span></div>`).join('')}</div><small>Bosish: ✓ bajarildi → — bugun kerak emas → bo‘sh</small></div>
+<div class=c><h2>Kunlik o‘lchovlar</h2><div class=g3><div><label>Vazn, kg</label><input type=number step=.1 inputmode=decimal value="${r.w??''}" data-k="w"></div><div><label>Tortilish max</label><input type=number inputmode=numeric value="${r.p??''}" data-k="p"></div><div><label>Yotgan vaqt</label><input type=time value="${r.b??''}" data-k="b"></div></div><small>Vazn va tortilishni haftada 1 marta (yakshanba ertalab) yozsang yetarli. Yotgan vaqtni har kuni yoz.</small></div>`}
+
+function vH(){const a=wk(cur),v=a.map(pc),av=avg(a),ms=miss(a);
+return `<div class=c><div class=r><button class=g data-a="mv(-7)">‹</button><h2>${fm(a[0])} – ${fm(a[6])}</h2><button class=g data-a="mv(7)">›</button></div>
+<div class=r style="margin-top:12px"><b class=big>${av===null?'—':av+'%'}</b><small>🔥 ketma-ket ${streak()} kun (70%+ kunlar)</small></div>
+<div class=cols>${a.map((s,i)=>`<div data-a="pk('${s}')"><i style="height:${v[i]||0}%;background:${bg(v[i])}"></i></div>`).join('')}</div>
+<div class=lb>${a.map((s,i)=>`<small>${W2[i]}<br>${v[i]===null?'·':v[i]}</small>`).join('')}</div></div>
+<div class=c><h2>Eng ko‘p o‘tkazilgan odatlar</h2>${ms.length?ms.map(x=>`<div class=r style="padding:6px 0"><span>${x[0]}</span><small>${x[1]} marta</small></div>`).join(''):'<small>Hozircha yo‘q yoki yozuv hali boshlanmagan.</small>'}</div>`}
+
+function vO(){const d=pd(cur),y=d.getFullYear(),m=d.getMonth(),o=(new Date(y,m,1).getDay()+6)%7,a=mdays(y,m),av=avg(a),g=a.filter(s=>(pc(s)||0)>=80).length;
+return `<div class=c><div class=r><button class=g data-a="sm(-1)">‹</button><h2>${MN[m]} ${y}</h2><button class=g data-a="sm(1)">›</button></div>
+<div class=r style="margin-top:12px"><b class=big>${av===null?'—':av+'%'}</b><small>${g} kun 80%+ bo‘ldi</small></div>
+<div class=cal>${W2.map(x=>`<small style="text-align:center">${x}</small>`).join('')}${'<span></span>'.repeat(o)}${a.map((s,i)=>{const p=pc(s);return `<div class="${p===null?'':'d '+cl(p)}${s===today()?' td':''}" data-a="pk('${s}')">${i+1}</div>`}).join('')}</div></div>`}
+
+function vY(){const y=pd(cur).getFullYear(),M=[...Array(12)].map((_,m)=>avg(mdays(y,m))),all=[].concat(...[...Array(12)].map((_,m)=>mdays(y,m))),av=avg(all),n=all.filter(s=>pc(s)!==null).length;
+return `<div class=c><div class=r><button class=g data-a="sy(-1)">‹</button><h2>${y}-yil</h2><button class=g data-a="sy(1)">›</button></div>
+<div class=r style="margin-top:12px"><b class=big>${av===null?'—':av+'%'}</b><small>${n} kun kuzatildi · oylar bo‘yicha o‘rtacha</small></div>
+<div class=cols>${M.map((v,m)=>`<div data-a="pm(${y},${m})"><i style="height:${v||0}%;background:${bg(v)}"></i></div>`).join('')}</div>
+<div class=lb>${M.map((v,m)=>`<small>${m+1}<br>${v===null?'·':v}</small>`).join('')}</div></div>`}
+
+const ser=k=>Object.keys(S.d).sort().filter(s=>S.d[s][k]!==undefined&&S.d[s][k]!=='').map(s=>[s,+S.d[s][k]]),
+bm=s=>{const[h,m]=s.split(':').map(Number);return(h<12?h+24:h)*60+m},
+bt=x=>{x=Math.round(x)%1440;return pad(Math.floor(x/60))+':'+pad(x%60)};
+function sp(v){if(v.length<2)return'';const mn=Math.min(...v),r=Math.max(...v)-mn||1,p=v.map((y,i)=>(i/(v.length-1)*300).toFixed(1)+','+(36-(y-mn)/r*32).toFixed(1)).join(' ');return `<svg viewBox="0 0 300 40" width="100%" height="40" preserveAspectRatio="none"><polyline points="${p}" fill="none" stroke="var(--ac)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`}
+function cd(t,a,u){if(!a.length)return `<div class=c><h2>${t}</h2><small>Hali yozuv yo‘q. “Bugun” bo‘limidagi o‘lchovlarga yoz.</small></div>`;const f=a[0][1],l=a[a.length-1][1],d=Math.round((l-f)*10)/10;return `<div class=c><div class=r><h2>${t}</h2><small>boshida ${f} → ${d>0?'+':''}${d} ${u}</small></div><b class=big style="display:block;margin:8px 0">${l} <small>${u}</small></b>${sp(a.map(x=>x[1]))}</div>`}
+function vB(){const w=ser('w'),bd=Object.keys(S.d).sort().filter(s=>S.d[s].b).map(s=>bm(S.d[s].b)),l=bd.slice(-7),p=bd.slice(-14,-7),av=a=>a.reduce((x,y)=>x+y,0)/a.length;
+let bh='<small>Hali yozuv yo‘q. Yotgan vaqtni “Bugun” bo‘limiga yoz.</small>';
+if(l.length){const a=av(l);bh=`<b class=big>${bt(a)}</b>`+(p.length?`<br><small>oldingi 7 yozuvga nisbatan ${Math.abs(Math.round(a-av(p)))} daqiqa ${a<av(p)?'oldin':'keyin'}</small>`:'')+'<br><small>Maqsad: 23:00 (07:00 gacha 8 soat uyqu)</small>'}
+const lw=w.length?w[w.length-1][1]:0;
+return cd('Vazn',w,'kg')+(lw?`<div class=c><div class=r><h2>Tana massa indeksi (TMI)</h2><b>${(lw/3.0976).toFixed(1)}</b></div><small>Bo‘y 1,76 m bo‘yicha hisoblandi. Me’yor: 18,5–24,9</small></div>`:'')+cd('Tortilish (bir urinishda)',ser('p'),'ta')+`<div class=c><h2>O‘rtacha yotish vaqti (oxirgi 7 yozuv)</h2><div style="margin-top:8px">${bh}</div></div>`}
+
+function R(){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.k===tab));
+$('main').innerHTML=busy?'<div class=c><small>Yuklanmoqda…</small></div>':({t:vT,h:vH,o:vO,y:vY,b:vB}[tab])()+(tab==='b'?BK:'')+(note?`<div class=c><small>${note}</small></div>`:'')+`<small>Ma’lumotlar shu qurilmada saqlanadi.</small>`}
+const go=(k,r)=>{tab=k;if(r)cur=today();R();scrollTo(0,0)},
+mv=n=>{cur=addD(cur,n);R()},
+sm=n=>{const d=pd(cur);cur=ds(new Date(d.getFullYear(),d.getMonth()+n,1));R()},
+sy=n=>{const d=pd(cur);cur=ds(new Date(d.getFullYear()+n,0,1));R()},
+pk=s=>{cur=s;tab='t';R();scrollTo(0,0)},
+pm=(y,m)=>{cur=ds(new Date(y,m,1));tab='o';R();scrollTo(0,0)};
+function tg(id){const r=rec(cur);r.t=r.t||{};const v=(r.t[id]||0)+1;if(v>2)delete r.t[id];else r.t[id]=v;sv(cur);R()}
+function ip(k,v){const r=rec(cur);if(v==='')delete r[k];else r[k]=v;sv(cur)}
+const BK='<div class=c><h2>Zaxira nusxa</h2><small>Telefon almashsa yoki brauzer tozalansa, ma’lumot yo‘qolmasligi uchun ora-sira yuklab qo‘y.</small><div class=r style="margin-top:10px"><button class=g data-a="ex()">Yuklab olish</button><label class=g style="margin:0;color:var(--tx)">Tiklash<input id=imp type=file accept=".json,application/json" hidden></label></div></div>';
+function sv(){try{localStorage.setItem('kt1',JSON.stringify(S.d))}catch(e){note='⚠ Saqlab bo‘lmadi: brauzer xotirasi yopiq yoki to‘la.';R()}}
+function ex(){const f=new File([JSON.stringify(S.d)],'kun-trekeri-'+today()+'.json',{type:'application/json'});
+if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f]}).catch(()=>{});return}
+const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;a.click()}
+function im(f){const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||typeof d!=='object')throw 0;S.d=d;sv();note='';R()}catch(e){note='⚠ Fayl noto‘g‘ri.';R()}};r.readAsText(f)}
+const H={go,mv,sm,sy,pk,pm,tg,ex};
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const m=el.dataset.a.match(/^(\w+)\((.*)\)$/);if(m&&H[m[1]])H[m[1]](...JSON.parse('['+m[2].replace(/'/g,'"')+']'))});
+document.addEventListener('change',e=>{const el=e.target;if(el.dataset.k)ip(el.dataset.k,el.value);else if(el.id==='imp'&&el.files[0]){if(confirm('Hozirgi ma’lumotlar almashtiriladi. Davom etasizmi?'))im(el.files[0]);el.value=''}});
+try{S.d=JSON.parse(localStorage.getItem('kt1')||'{}')}catch(e){}
+busy=false;R();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
